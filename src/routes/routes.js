@@ -1,27 +1,20 @@
 const logSistemaController = require("../controllers/logSistemaController");
 const { login, refresh, register, validarToken } = require("../handlers/handlers");
-const { validarToken } = require("../middleware/middlewareAuth");
+// const { validarToken } = require("../middleware/middlewareAuth");
+const usuarioCtrl = require("../controllers/usuarioController");
 
-module.exports = async function (app) {
-  // app.post("/listarPartner", Prestamos.generalForwarding);
-
-  // app.use((req, res, next) => {
-  //   console.log('Time:', Date.now())
-  //   console.log('req.originalUrl::',req.originalUrl);
-
-  //   if(req.originalUrl == '/register' || req.originalUrl == '/login'){
-  //       next();
-  //   }else{        
-  //       validarToken(req, res, next);
-  //   }
-  // });
-
-  app.use(validarToken);
+module.exports = async function (app) {   
+  // app.use(validarToken);
 
   app.post("/getLogSistema", logSistemaController.getLogSistema);
   app.post("/registerLogSistema", logSistemaController.registerLogSistema);
 
-  app.post("/register", register);
-  app.post("/login", login);
-  app.post("/refresh", refresh);
+  app.post("/registerTest", register);
+  app.post("/loginTest", login);
+  app.post("/refreshTest", refresh);
+
+
+  app.post("/registerUser", usuarioCtrl.registrarUsuario);
+  app.post("/login", usuarioCtrl.login);
+
 };

@@ -12,7 +12,7 @@ const register = (req, res) => {
   }
 
   // registramos el usuario
-  // myFuncion.registrarUsuario(username, password, nombre);
+  //  myFuncion.registrarUsuario(username, password, nombre);
 
   // devolvemos el token
   const resp = {
