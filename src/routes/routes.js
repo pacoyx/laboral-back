@@ -14,7 +14,8 @@ module.exports = async function (app) {
   app.post("/refreshTest", refresh);
 
 
-  app.post("/registerUser", usuarioCtrl.registrarUsuario);
   app.post("/login", usuarioCtrl.login);
+  app.post("/registerUser", usuarioCtrl.registrarUsuario);
+  app.post("/validateRegisterUser", usuarioCtrl.validaRegistroUsuario);
 
 };
