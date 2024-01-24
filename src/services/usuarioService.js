@@ -23,6 +23,27 @@ exports.login = async function (body) {
   return respOk;
 };
 
+exports.existeLogin = async function (body) {
+  const respLog = await usuarioRepo.existeLogin(body);
+  console.log('respLog==>',respLog);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      correo: body.correo,
+      existe:'NO'
+    };
+    return resp;
+  }
+  
+  const respOk = {
+    codigoRespuesta: "00",
+    data: respLog.data[0],
+    existe:'SI'
+  };
+
+  return respOk;
+};
+
 exports.registrarUsuario = async function (body) {
   const query = {
     correo: body.correo,
