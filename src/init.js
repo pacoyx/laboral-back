@@ -3,8 +3,11 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 module.exports = (app) => {
-  app.listen(process.env.node_port, "0.0.0.0", () => {
-    console.log("Laboral backend listening on port " + process.env.node_port);
+
+  const port = process.env.node_port || 3000;
+  
+  app.listen(port, "0.0.0.0", () => {
+    console.log("Laboral backend listening on port " + port);
   });
 
   app.on("uncaughtException", (req, res, err, cb) => {
