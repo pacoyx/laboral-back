@@ -50,8 +50,7 @@ exports.registrarUsuario = async function (body) {
     clave: body.clave,
     nombreCompleto: body.nombreCompleto,
     nombreEmpresa: body.nombreEmpresa,
-    celular: body.celular,
-    estado: body.estado,
+    celular: body.celular    
   };
 
   const respLog = await usuarioRepo.registrarUsuario(query);
@@ -73,8 +72,12 @@ exports.registrarUsuario = async function (body) {
   var dataDesEncriptada = encriptador.decrypt(dataEncriptada);
   console.log('dataDesEncriptada==>',dataDesEncriptada);
 
+  const objDatos = {
+    url,
+    correo : body.correo
+  }
 
-  mailService.enviarCorreo(url);
+  mailService.enviarCorreo(objDatos);
 
   const respOk = {
     codigoRespuesta: "00",

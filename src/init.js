@@ -4,7 +4,7 @@ dotenv.config();
 
 module.exports = (app) => {
   app.listen(process.env.node_port, "0.0.0.0", () => {
-    console.log("kyoErp listening on port " + process.env.node_port);
+    console.log("Laboral backend listening on port " + process.env.node_port);
   });
 
   app.on("uncaughtException", (req, res, err, cb) => {
