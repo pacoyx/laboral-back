@@ -2,10 +2,15 @@ const empresaRepo = require("../repositories/empresaRepository");
 
 exports.registrarEmpresa = async function (body) {
   const query = {
-    correo: body.correo,
-    nombreEmpresa: body.nombreEmpresa,
-    ubicacion: body.ubicacion,
-    url: body.url,
+    ruc: body.ruc,
+    name: body.name,
+    icon: body.icon,
+    rating: body.rating,
+    location: body.location,
+    linkedin: body.linkedin,
+    webpage: body.webpage,
+    endorse: body.endorse,
+    about: body.about,
   };
 
   const respLog = await empresaRepo.registrarEmpresa(query);
