@@ -10,3 +10,10 @@ exports.registrarEmpresa = async function (req,res) {
     myFile.mv(__dirname + "/upload/" + fileName);
     return res.json(respLog);
 }
+
+
+exports.listarEmpresaPorIdUser = async function (req,res) {
+    const body = req.body;
+    const respLog = await empresaService.listarEmpresaPorIdUser(body);
+    return res.json(respLog);
+}

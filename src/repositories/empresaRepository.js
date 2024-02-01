@@ -12,8 +12,9 @@ exports.registrarEmpresa = async function (query) {
       query.webpage,
       query.endorse, //endorse
       query.about, //about
+      query.idUser //about
     ];
-    const SP_QUERY = "CALL sp_i_company(?,?,?,?,?,?,?,?,?);";
+    const SP_QUERY = "CALL sp_i_company(?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
@@ -26,6 +27,25 @@ exports.registrarEmpresa = async function (query) {
         data: [],
       };
     }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+
+exports.listarEmpresaPorIdUsuario = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idUser];
+    const SP_QUERY = "CALL sp_s_company_byiduser(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);    
+      return {
+        estado: true,
+        data:  affectedRows
+      };    
   } catch (error) {
     console.error(error);
     return {

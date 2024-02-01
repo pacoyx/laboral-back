@@ -11,6 +11,7 @@ exports.registrarEmpresa = async function (body) {
     webpage: body.webpage,
     endorse: body.endorse,
     about: body.about,
+    idUser: body.idUser,
   };
 
   const respLog = await empresaRepo.registrarEmpresa(query);
@@ -30,3 +31,22 @@ exports.registrarEmpresa = async function (body) {
 
   return respOk;
 };
+
+exports.listarEmpresaPorIdUser = async function (body) {
+  const respLog = await empresaRepo.listarEmpresaPorIdUsuario(body);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data.length > 0 ? respLog.data[0] : {},
+  };
+  return respOk;
+};
+
+

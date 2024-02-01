@@ -19,8 +19,12 @@ module.exports = async function (app) {
   app.post("/validateRegisterUser", usuarioCtrl.validaRegistroUsuario);
   app.post("/validateExistsUser", usuarioCtrl.Existelogin);
   app.post("/registerCompany", empresaCtrl.registrarEmpresa);
+  app.post("/getCompanyByIdUser", empresaCtrl.listarEmpresaPorIdUser);
 
   app.get("/health", (req, res) => {
+  
+    // const testMail = require("../services/mailService");  
+    // testMail.testEnviarCorreo();
     console.log('status api ok');
     return res.json({ status: "ok" });
   });
