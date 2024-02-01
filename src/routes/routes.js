@@ -21,8 +21,7 @@ module.exports = async function (app) {
   app.post("/registerCompany", empresaCtrl.registrarEmpresa);
   app.post("/getCompanyByIdUser", empresaCtrl.listarEmpresaPorIdUser);
 
-  app.get("/health", (req, res) => {
-  
+  app.get("/health", (req, res) => {  
     // const testMail = require("../services/mailService");  
     // testMail.testEnviarCorreo();
     console.log('status api ok');
