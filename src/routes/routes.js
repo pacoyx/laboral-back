@@ -8,6 +8,7 @@ const {
 // const { validarToken } = require("../middleware/middlewareAuth");
 const usuarioCtrl = require("../controllers/usuarioController");
 const empresaCtrl = require("../controllers/empresaController");
+const empleosCtrl = require("../controllers/empleosController");
 const fileupload = require("express-fileupload");
 
 module.exports = async function (app) {
@@ -20,6 +21,8 @@ module.exports = async function (app) {
   app.post("/validateExistsUser", usuarioCtrl.Existelogin);
   app.post("/registerCompany", empresaCtrl.registrarEmpresa);
   app.post("/getCompanyByIdUser", empresaCtrl.listarEmpresaPorIdUser);
+  app.post("/registerJob", empleosCtrl.registrarEmpleos);
+  app.post("/getJobsByIdUser", empleosCtrl.listarEmpleosPorUsuario);
 
   app.get("/health", (req, res) => {  
     // const testMail = require("../services/mailService");  
