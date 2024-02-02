@@ -74,7 +74,8 @@ exports.registrarUsuario = async function (body) {
 
   const objDatos = {
     url,
-    correo : body.correo
+    correo : body.correo,
+    nombre :body.nombreCompleto
   }
 
   mailService.enviarCorreo(objDatos);

@@ -24,11 +24,25 @@ const transporter = nodemailer.createTransport({
 
 exports.enviarCorreo = async function (objDatos) {
   var message = {
-    from: "Empleos laboral <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
     to: objDatos.correo,
-    subject: "Aviso de registro laboral.ai",
+    subject: "Aviso de registro laboral.ai",
     text: "Url de validacion: " + objDatos.url,
-    html: "Url de validacion: <a>" + objDatos.url + "<a/>",
+    html: `<html><body>
+    <p>
+          Hola ${objDatos.nombreCompleto},</p>
+
+          <p>¡Bienvenido a LABORAL.AI para empresas!</p>
+
+          <p>Estamos emocionados de confirmar que tu registro ha sido recibido con éxito. Para completar el proceso y activar tu cuenta, por favor haz clic en el siguiente enlace de confirmación:</p>
+
+          <p>[${objDatos.url}]</p>
+
+          <p>Una vez que hayas hecho clic en el enlace, tendrás acceso inmediato a una variedad de beneficios y servicios diseñados para optimizar tus procesos laborales y potenciar el rendimiento de tu empresa.</p>
+
+          Atentamente,<br>
+          El equipo Laboral.AI
+    </body></html>`
   };
 
   const info = await transporter.sendMail(message);
@@ -36,13 +50,27 @@ exports.enviarCorreo = async function (objDatos) {
 };
 
 
-exports.testEnviarCorreo = async function () {
+exports.testEnviarCorreo = async function (objDatos) {
   var message = {
-    from: "Empleos laboral <carlos.bazan@lavanderiakyo.com>",
-    to: "pacoyx@gmail.com",
-    subject: "Aviso de registro laboral.ai",
-    text: "Url de validacion: ",
-    html: "Url de validacion: <a> www.laboral.ai.com/validacionTest <a/>",
+    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    to: objDatos.correo,
+    subject: "Aviso de registro laboral.ai",
+    text: "Url de validacion: " + objDatos.url,
+    html: `<html><body>
+    <p>
+    Hola ${objDatos.nombreCompleto},</p>
+
+    <p>¡Bienvenido a LABORAL.AI para empresas!</p>
+
+    <p>Estamos emocionados de confirmar que tu registro ha sido recibido con éxito. Para completar el proceso y activar tu cuenta, por favor haz clic en el siguiente enlace de confirmación:</p>
+
+    <p>[${objDatos.url}]</p>
+
+    <p>Una vez que hayas hecho clic en el enlace, tendrás acceso inmediato a una variedad de beneficios y servicios diseñados para optimizar tus procesos laborales y potenciar el rendimiento de tu empresa.</p>
+
+    Atentamente,<br>
+    El equipo Laboral.AI
+    </body></html>`
   };
 
   const info = await transporter.sendMail(message);

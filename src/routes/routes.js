@@ -25,8 +25,13 @@ module.exports = async function (app) {
   app.post("/getJobsByIdUser", empleosCtrl.listarEmpleosPorUsuario);
 
   app.get("/health", (req, res) => {  
-    // const testMail = require("../services/mailService");  
-    // testMail.testEnviarCorreo();
+    //  const testMail = require("../services/mailService");  
+    //  const objDatos = {
+    //   url:'www.pruebas.com/sdsdsd',
+    //   correo : 'pacoyx@gmail.com',
+    //   nombreCompleto : 'carlos bazan'
+    // }
+    //  testMail.testEnviarCorreo(objDatos);
     console.log('status api ok');
     return res.json({ status: "ok" });
   });
