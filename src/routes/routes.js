@@ -41,4 +41,7 @@ module.exports = async function (app) {
   // app.post("/registerTest", register);
   // app.post("/loginTest", login);
   // app.post("/refreshTest", refresh);
+
+  console.log(__dirname);
+  console.log(process.cwd() );
 };

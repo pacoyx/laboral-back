@@ -7,7 +7,9 @@ exports.registrarEmpresa = async function (req,res) {
     body.icon = fileName;
     const respLog = await empresaService.registrarEmpresa(body);
 
-    myFile.mv(__dirname + "/upload/" + fileName);
+    // myFile.mv(__dirname + "/upload/" + fileName);
+    myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
+    
     return res.json(respLog);
 }
 
