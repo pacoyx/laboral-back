@@ -9,6 +9,7 @@ dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use('/public', express.static('resources/static/uploads'));
 
 consign({
     cwd: __dirname

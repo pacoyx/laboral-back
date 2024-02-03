@@ -1,4 +1,6 @@
 const auroraPool = require("../config/db/auroraConnection");
+const auroraPool2 = require("../config/db/mysqlCnxb2c");
+
 
 exports.listarEmpleosPorIdUsuario = async function (query) {
   try {
@@ -44,6 +46,43 @@ exports.registrarEmpleo = async function (query) {
     const SP_QUERY =
       "CALL sp_i_job_description(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    if (respdb.affectedRows > 0) {
+      return {
+        estado: true,
+        data: [],
+      };
+    } else {
+      return {
+        estado: false,
+        data: [],
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+
+exports.registrarEmpleob2c = async function (query) {
+  try {
+    const SP_PARAMETERS = [
+      query.req_qualifications,
+      1,
+      query.job_title,
+      query.date_expiration,
+      query.date_entry,
+      '',
+      query.pref_qualifications,
+      query.location,
+      '1'      
+    ];
+    const SP_QUERY =
+      "CALL sp_i_job(?,?,?,?,?,?,?,?,?);";
+    const respdb = await auroraPool2.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
         estado: true,

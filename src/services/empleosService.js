@@ -28,6 +28,18 @@ exports.registrarEmpleo = async function (body) {
     return resp;
   }
 
+  const respLog2 = await empleosRepo.registrarEmpleob2c(body);
+  if (!respLog2.estado) {
+    console.log("[ERROR]", respLog2.error);
+    const resp = {
+      codigoRespuesta: "99",
+      error: "error interno",
+    };
+    return resp;
+  }
+
+
+
   const respOk = {
     codigoRespuesta: "00",
     data: "empleo registrado",

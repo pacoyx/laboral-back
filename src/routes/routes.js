@@ -13,6 +13,7 @@ const fileupload = require("express-fileupload");
 
 module.exports = async function (app) {
   app.use(fileupload());
+  
   // app.use(validarToken);
 
   app.post("/login", usuarioCtrl.login);
