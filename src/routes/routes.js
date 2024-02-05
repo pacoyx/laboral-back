@@ -20,10 +20,14 @@ module.exports = async function (app) {
   app.post("/registerUser", usuarioCtrl.registrarUsuario);
   app.post("/validateRegisterUser", usuarioCtrl.validaRegistroUsuario);
   app.post("/validateExistsUser", usuarioCtrl.Existelogin);
+  app.post("/updateDataUser", usuarioCtrl.actualizarDatosReclutador);
   app.post("/registerCompany", empresaCtrl.registrarEmpresa);
   app.post("/getCompanyByIdUser", empresaCtrl.listarEmpresaPorIdUser);
   app.post("/registerJob", empleosCtrl.registrarEmpleos);
   app.post("/getJobsByIdUser", empleosCtrl.listarEmpleosPorUsuario);
+  app.post("/getRecruiterById", usuarioCtrl.listarReclutadorPorId);
+  app.post("/updatePasswordAccount", usuarioCtrl.actualizarPwdReclutador);
+
 
   app.get("/health", (req, res) => {  
     //  const testMail = require("../services/mailService");  
@@ -43,6 +47,7 @@ module.exports = async function (app) {
   // app.post("/loginTest", login);
   // app.post("/refreshTest", refresh);
 
-  console.log(__dirname);
-  console.log(process.cwd() );
+  // console.log(__dirname);
+  // console.log(process.cwd() );
+  // console.log(new Date().getTime() );
 };

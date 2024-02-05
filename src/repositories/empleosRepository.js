@@ -42,9 +42,10 @@ exports.registrarEmpleo = async function (query) {
       query.status,
       query.nps,
       query.id_recruiter,
+      query.modality,
     ];
     const SP_QUERY =
-      "CALL sp_i_job_description(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+      "CALL sp_i_job_description(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
@@ -71,17 +72,18 @@ exports.registrarEmpleob2c = async function (query) {
   try {
     const SP_PARAMETERS = [
       query.req_qualifications,
-      1,
+      query.id_recruiter,
       query.job_title,
       query.date_expiration,
       query.date_entry,
-      '',
+      query.modality,
       query.pref_qualifications,
       query.location,
-      '1'      
+      '1',
+      query.modality,      
     ];
     const SP_QUERY =
-      "CALL sp_i_job(?,?,?,?,?,?,?,?,?);";
+      "CALL sp_i_job(?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool2.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {

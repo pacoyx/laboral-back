@@ -17,7 +17,7 @@ function initAuroraConn() {
         host            : process.env.aurora_server, 
         user            : process.env.aurora_userdb, 
         password        : process.env.aurora_password, 
-        database        : 'dev_laboral',
+        database        : process.env.aurora_database_b2c,
         port            : process.env.aurora_port,
     })
 

@@ -24,8 +24,7 @@ exports.login = async function (body) {
 };
 
 exports.existeLogin = async function (body) {
-  const respLog = await usuarioRepo.existeLogin(body);
-  console.log('respLog==>',respLog);
+  const respLog = await usuarioRepo.existeLogin(body); 
   if (!respLog.estado) {
     const resp = {
       codigoRespuesta: "99",
@@ -131,3 +130,58 @@ exports.validaRegistroUsuario = async function (body) {
   };
   return respOk;
 };
+
+exports.actualizarDatosReclutador = async function (body) {
+  const respLog = await usuarioRepo.actualizarDatosReclutador(body);
+  if (!respLog.estado) {
+    console.log("[ERROR]", respLog.error);
+    const resp = {
+      codigoRespuesta: "99",
+      error: "error interno",
+    };
+    return resp;
+  }
+
+  const respOk = {
+    codigoRespuesta: "00",
+    actualizacion: "ok"    
+  };
+  return respOk;
+
+}
+
+exports.listarReclutadorPorId = async function (body) {
+  const respLog = await usuarioRepo.listarReclutadorPorId(body);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data.length > 0 ? respLog.data[0] : {}, 
+  };
+  return respOk;
+};
+
+exports.actualizarPwdReclutador = async function (body) {
+  const respLog = await usuarioRepo.actualizarPwdReclutador(body);
+  if (!respLog.estado) {
+    console.log("[ERROR]", respLog.error);
+    const resp = {
+      codigoRespuesta: "99",
+      error: "error interno",
+    };
+    return resp;
+  }
+
+  const respOk = {
+    codigoRespuesta: "00",
+    actualizacion: "ok"    
+  };
+  return respOk;
+
+}

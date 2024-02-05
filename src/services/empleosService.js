@@ -20,7 +20,7 @@ exports.listarEmpleosPorIdUser = async function (body) {
 exports.registrarEmpleo = async function (body) {
   const respLog = await empleosRepo.registrarEmpleo(body);
   if (!respLog.estado) {
-    console.log("[ERROR]", respLog.error);
+    console.log("[ERROR 1]", respLog.error);
     const resp = {
       codigoRespuesta: "99",
       error: "error interno",
@@ -30,15 +30,13 @@ exports.registrarEmpleo = async function (body) {
 
   const respLog2 = await empleosRepo.registrarEmpleob2c(body);
   if (!respLog2.estado) {
-    console.log("[ERROR]", respLog2.error);
+    console.log("[ERROR 2]", respLog2.error);
     const resp = {
       codigoRespuesta: "99",
       error: "error interno",
     };
     return resp;
   }
-
-
 
   const respOk = {
     codigoRespuesta: "00",
