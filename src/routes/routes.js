@@ -27,7 +27,10 @@ module.exports = async function (app) {
   app.post("/getJobsByIdUser", empleosCtrl.listarEmpleosPorUsuario);
   app.post("/getRecruiterById", usuarioCtrl.listarReclutadorPorId);
   app.post("/updatePasswordAccount", usuarioCtrl.actualizarPwdReclutador);
+  app.post("/getJobsOpenClose", empleosCtrl.listarEmpleosopenClose);
+  app.post("/deleteJobsByIds", empleosCtrl.eliminarEmpleoPorId);
 
+  app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
 
   app.get("/health", (req, res) => {  
     //  const testMail = require("../services/mailService");  

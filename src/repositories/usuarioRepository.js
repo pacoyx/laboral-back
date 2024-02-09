@@ -62,8 +62,9 @@ exports.registrarUsuario = async function (query) {
       "", //localidad ciudad y pais
       0,
       query.clave,
+      query.icono,
     ];
-    const SP_QUERY = "CALL sp_i_recruiter(?,?,?,?,?,?,?,?,?);";
+    const SP_QUERY = "CALL sp_i_recruiter(?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
@@ -210,6 +211,25 @@ exports.actualizarPwdReclutador = async function (query) {
         data: [],
       };
     }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.listarReclutadorPorEmail = async function (email) {
+  try {
+    const SP_PARAMETERS = [email];
+
+    const SP_QUERY = "CALL sp_s_getRecruiter_by_email(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows,
+    };
   } catch (error) {
     console.error(error);
     return {

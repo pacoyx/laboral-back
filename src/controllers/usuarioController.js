@@ -1,10 +1,52 @@
 const usuarioService = require("../services/usuarioService");
+const tokenService = require("../services/tokenService");
 const fs = require("fs");
 
 exports.login = async function (req, res) {
   const body = req.body;
   const respLog = await usuarioService.login(body);
   return res.json(respLog);
+};
+
+exports.validaTokenGoogle = async function (req, res) {
+  const body = req.body;
+
+  // validamos token google
+  const respValidacion = await usuarioService.validarTokenGoogle(body.token);
+  if (respValidacion.codigoRespuesta != "00") {
+    return res.json(respValidacion);
+  }
+
+  // registamos usuario en BD
+  const reqUsu = {
+    correo: respValidacion.user.email,
+    clave: respValidacion.user.email,
+    nombreCompleto: respValidacion.user.name,
+    nombreEmpresa: "",
+    celular: "000-000-000",
+    icono: respValidacion.user.picture
+  };
+  const respRegUsu = await usuarioService.registrarUsuario(reqUsu);
+  if (respRegUsu.codigoRespuesta != "00") {
+    return respRegUsu;
+  }
+
+  //traemos data del reclutador por email
+
+  const respdataReclu = await usuarioService.listarReclutadorPorEmail(reqUsu.correo);
+  if (respdataReclu.hasData) {
+
+  }
+
+  // generamos jwt
+  const token = tokenService.GenerarToken(reqUsu.correo);
+
+  // devolvemos la data de usuario OK
+  return res.json({
+    codigoRespuesta: '00',
+    data: respdataReclu.data,
+    token,
+  });
 };
 
 exports.Existelogin = async function (req, res) {
@@ -31,7 +73,8 @@ exports.actualizarDatosReclutador = async function (req, res) {
   var fileName = "";
   if (req.files) {
     const { myFile } = req.files;
-    fileName = "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
+    fileName =
+      "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
     myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
 
     try {
@@ -55,7 +98,7 @@ exports.listarReclutadorPorId = async function (req, res) {
 };
 
 exports.actualizarPwdReclutador = async function (req, res) {
-    const body = req.body;
-    const respLog = await usuarioService.actualizarPwdReclutador(body);
-    return res.json(respLog);
-  };
+  const body = req.body;
+  const respLog = await usuarioService.actualizarPwdReclutador(body);
+  return res.json(respLog);
+};

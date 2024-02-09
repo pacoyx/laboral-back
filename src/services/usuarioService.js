@@ -2,6 +2,7 @@ const usuarioRepo = require("../repositories/usuarioRepository");
 const tokenService = require("./tokenService");
 const encriptador = require("../utils/encript");
 const mailService = require("./mailService");
+const { OAuth2Client } = require("google-auth-library");
 
 exports.login = async function (body) {
   const respLog = await usuarioRepo.login(body);
@@ -49,7 +50,8 @@ exports.registrarUsuario = async function (body) {
     clave: body.clave,
     nombreCompleto: body.nombreCompleto,
     nombreEmpresa: body.nombreEmpresa,
-    celular: body.celular    
+    celular: body.celular,
+    icono: body.icono
   };
 
   const respLog = await usuarioRepo.registrarUsuario(query);
@@ -64,12 +66,12 @@ exports.registrarUsuario = async function (body) {
 
   const objEncriptar = { correo: body.correo, clave: body.clave };
   const dataEncriptada = encriptador.encrypt(JSON.stringify(objEncriptar));
-  console.log('data encriptada****', dataEncriptada);
+  //console.log('data encriptada****', dataEncriptada);
   const token = dataEncriptada.iv + "|" + dataEncriptada.encryptedData;
   const url = process.env.url_validate_register + token;
   
-  var dataDesEncriptada = encriptador.decrypt(dataEncriptada);
-  console.log('dataDesEncriptada==>',dataDesEncriptada);
+  //var dataDesEncriptada = encriptador.decrypt(dataEncriptada);
+  //console.log('dataDesEncriptada==>',dataDesEncriptada);
 
   const objDatos = {
     url,
@@ -185,3 +187,51 @@ exports.actualizarPwdReclutador = async function (body) {
   return respOk;
 
 }
+
+exports.validarTokenGoogle = async function (token) {
+  
+const clientId='981520994137-jeoi9je1nikppgossau431aa4c070ge2.apps.googleusercontent.com';
+const client = new OAuth2Client(clientId);
+try {
+  const verify = await client.verifyIdToken({
+    idToken:token,
+    audience:clientId
+  });
+  const user = verify.getPayload();
+  const respOk = {
+    codigoRespuesta: "00",
+    user
+  };
+
+
+  return respOk;
+
+} catch (error) {
+  const respErr = {
+    codigoRespuesta: "99",
+    error
+  };
+  return respErr;
+}
+
+
+
+  
+}
+
+exports.listarReclutadorPorEmail = async function (email) {
+  const respLog = await usuarioRepo.listarReclutadorPorEmail(email);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data.length > 0 ? respLog.data[0] : {}, 
+  };
+  return respOk;
+};

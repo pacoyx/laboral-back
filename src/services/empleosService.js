@@ -45,3 +45,39 @@ exports.registrarEmpleo = async function (body) {
 
   return respOk;
 };
+
+exports.listarEmpleosOpenClose = async function (body) {
+  const resp = await empleosRepo.listarEmpleosOpenClose(body);
+  if (!resp.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: resp.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: resp.data.length > 0 ? true : false,
+    data: resp.data,
+  };
+  return respOk;
+};
+
+exports.eliminarEmpleoPorId = async function (body) {
+  var respDB = [];
+  body.ids.forEach(async (element) => {
+    const respLog = await empleosRepo.eliminarEmpleoPorId(element);
+    respDB.push(respLog.estado);
+    if (!respLog.estado) {
+      console.log("[ERROR]", respLog.error);
+    }
+  });
+
+  const respOk = {
+    codigoRespuesta: "00",
+    data: "empleo(s) elimiando(s)",
+    respDB
+  };
+
+  return respOk;
+};

@@ -1,7 +1,6 @@
 const auroraPool = require("../config/db/auroraConnection");
 const auroraPool2 = require("../config/db/mysqlCnxb2c");
 
-
 exports.listarEmpleosPorIdUsuario = async function (query) {
   try {
     const SP_PARAMETERS = [query.idUser];
@@ -67,7 +66,6 @@ exports.registrarEmpleo = async function (query) {
   }
 };
 
-
 exports.registrarEmpleob2c = async function (query) {
   try {
     const SP_PARAMETERS = [
@@ -79,12 +77,56 @@ exports.registrarEmpleob2c = async function (query) {
       query.modality,
       query.pref_qualifications,
       query.location,
-      '1',
-      query.modality,      
+      "1",
+      query.modality,
     ];
-    const SP_QUERY =
-      "CALL sp_i_job(?,?,?,?,?,?,?,?,?,?);";
+    const SP_QUERY = "CALL sp_i_job(?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool2.queryAsync(SP_QUERY, SP_PARAMETERS);
+    if (respdb.affectedRows > 0) {
+      return {
+        estado: true,
+        data: [],
+      };
+    } else {
+      return {
+        estado: false,
+        data: [],
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.listarEmpleosOpenClose = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idReclutador, query.estado];
+    const SP_QUERY = "CALL sp_s_jobs_open_close(?,?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows      
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+
+exports.eliminarEmpleoPorId = async function (idJob) {
+  try {
+    const SP_PARAMETERS = [idJob];
+    const SP_QUERY =
+      "CALL sp_d_job_byid(?);";
+    const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
         estado: true,
