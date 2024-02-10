@@ -17,29 +17,31 @@ exports.validaTokenGoogle = async function (req, res) {
     return res.json(respValidacion);
   }
 
-  // registamos usuario en BD
-  const reqUsu = {
-    correo: respValidacion.user.email,
-    clave: respValidacion.user.email,
-    nombreCompleto: respValidacion.user.name,
-    nombreEmpresa: "",
-    celular: "000-000-000",
-    icono: respValidacion.user.picture
-  };
-  const respRegUsu = await usuarioService.registrarUsuario(reqUsu);
-  if (respRegUsu.codigoRespuesta != "00") {
-    return respRegUsu;
-  }
+ 
+
 
   //traemos data del reclutador por email
-
-  const respdataReclu = await usuarioService.listarReclutadorPorEmail(reqUsu.correo);
-  if (respdataReclu.hasData) {
-
+  const respdataReclu = await usuarioService.listarReclutadorPorEmail(respValidacion.user.email);
+  if (!respdataReclu.hasData) {
+    // registamos usuario en BD
+    const reqUsu = {
+      correo: respValidacion.user.email,
+      clave: respValidacion.user.email,
+      nombreCompleto: respValidacion.user.name,
+      nombreEmpresa: respValidacion.user.name,
+      celular: "000-000-000",
+      icono: respValidacion.user.picture,
+      typeLogin: 'google',
+    };
+    const respRegUsu = await usuarioService.registrarUsuario(reqUsu);
+    if (respRegUsu.codigoRespuesta != "00") {
+      return respRegUsu;
+    }
+  
   }
 
   // generamos jwt
-  const token = tokenService.GenerarToken(reqUsu.correo);
+  const token = tokenService.GenerarToken(respValidacion.user.email);
 
   // devolvemos la data de usuario OK
   return res.json({
@@ -71,10 +73,10 @@ exports.validaRegistroUsuario = async function (req, res) {
 exports.actualizarDatosReclutador = async function (req, res) {
   const body = JSON.parse(req.body.infoData);
   var fileName = "";
+  console.log('req.files==>',req.files);
   if (req.files) {
     const { myFile } = req.files;
-    fileName =
-      "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
+    fileName = "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
     myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
 
     try {

@@ -1,15 +1,19 @@
 const empresaService = require('../services/empresaService');
 
 exports.registrarEmpresa = async function (req,res) {
-    const { myFile } = req.files;
-    const body = JSON.parse(req.body.infoData);    
-    const fileName ="logo" + body.ruc + "." + myFile.name.split(".")[1];    
-    body.icon = fileName;
-    const respLog = await empresaService.registrarEmpresa(body);
 
-    // myFile.mv(__dirname + "/upload/" + fileName);
-    myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
+
+    const body = JSON.parse(req.body.infoData);    
+    var fileName = "";
+    if (req.files) {
+        const { myFile } = req.files;
+        fileName ="logo" + body.ruc + "." + myFile.name.split(".")[1];    
+        // myFile.mv(__dirname + "/upload/" + fileName);
+        myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
+    }
     
+    body.icon = fileName;
+    const respLog = await empresaService.registrarEmpresa(body);       
     return res.json(respLog);
 }
 

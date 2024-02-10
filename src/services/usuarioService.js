@@ -51,7 +51,8 @@ exports.registrarUsuario = async function (body) {
     nombreCompleto: body.nombreCompleto,
     nombreEmpresa: body.nombreEmpresa,
     celular: body.celular,
-    icono: body.icono
+    icono: body.icono,
+    typeLogin: body.typeLogin,
   };
 
   const respLog = await usuarioRepo.registrarUsuario(query);

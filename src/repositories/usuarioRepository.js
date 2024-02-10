@@ -60,11 +60,12 @@ exports.registrarUsuario = async function (query) {
       query.celular,
       "", //direccion
       "", //localidad ciudad y pais
-      0,
+      0,//idempresa
       query.clave,
       query.icono,
+      query.typeLogin, //sistema:google:linkedIn
     ];
-    const SP_QUERY = "CALL sp_i_recruiter(?,?,?,?,?,?,?,?,?,?);";
+    const SP_QUERY = "CALL sp_i_recruiter(?,?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
