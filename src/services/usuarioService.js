@@ -3,6 +3,7 @@ const tokenService = require("./tokenService");
 const encriptador = require("../utils/encript");
 const mailService = require("./mailService");
 const { OAuth2Client } = require("google-auth-library");
+const axios = require("axios");
 
 exports.login = async function (body) {
   const respLog = await usuarioRepo.login(body);
@@ -25,20 +26,20 @@ exports.login = async function (body) {
 };
 
 exports.existeLogin = async function (body) {
-  const respLog = await usuarioRepo.existeLogin(body); 
+  const respLog = await usuarioRepo.existeLogin(body);
   if (!respLog.estado) {
     const resp = {
       codigoRespuesta: "99",
       correo: body.correo,
-      existe:'NO'
+      existe: "NO",
     };
     return resp;
   }
-  
+
   const respOk = {
     codigoRespuesta: "00",
     data: respLog.data[0],
-    existe:'SI'
+    existe: "SI",
   };
 
   return respOk;
@@ -69,16 +70,16 @@ exports.registrarUsuario = async function (body) {
   const dataEncriptada = encriptador.encrypt(JSON.stringify(objEncriptar));
   //console.log('data encriptada****', dataEncriptada);
   const token = dataEncriptada.iv + "|" + dataEncriptada.encryptedData;
-  const url = process.env.url_validate_register + token;
-  
+  const url = process.env.url_tokenizada + token;
+
   //var dataDesEncriptada = encriptador.decrypt(dataEncriptada);
   //console.log('dataDesEncriptada==>',dataDesEncriptada);
 
   const objDatos = {
     url,
-    correo : body.correo,
-    nombre :body.nombreCompleto
-  }
+    correo: body.correo,
+    nombre: body.nombreCompleto,
+  };
 
   mailService.enviarCorreo(objDatos);
 
@@ -91,10 +92,9 @@ exports.registrarUsuario = async function (body) {
 };
 
 exports.validaRegistroUsuario = async function (body) {
-
   try {
-    var dataDesEncriptada = encriptador.decrypt(body);  
-    dataDesEncriptada = JSON.parse(dataDesEncriptada);  
+    var dataDesEncriptada = encriptador.decrypt(body);
+    dataDesEncriptada = JSON.parse(dataDesEncriptada);
   } catch (error) {
     const resp = {
       codigoRespuesta: "99",
@@ -103,12 +103,10 @@ exports.validaRegistroUsuario = async function (body) {
     };
     return resp;
   }
-  
-
 
   const respLog = await usuarioRepo.validarRegistroUsuario(dataDesEncriptada);
   if (!respLog.estado) {
-    console.log('[ERROR]',respLog.error);
+    console.log("[ERROR]", respLog.error);
     const resp = {
       codigoRespuesta: "99",
       validacion: "error",
@@ -118,7 +116,7 @@ exports.validaRegistroUsuario = async function (body) {
   }
 
   const respAct = await usuarioRepo.actualizarEstadoUsuario(dataDesEncriptada);
-  if(!respAct.estado){
+  if (!respAct.estado) {
     const resp = {
       codigoRespuesta: "99",
       validacion: "error",
@@ -129,7 +127,7 @@ exports.validaRegistroUsuario = async function (body) {
 
   const respOk = {
     codigoRespuesta: "00",
-    validacion: "ok"    
+    validacion: "ok",
   };
   return respOk;
 };
@@ -147,11 +145,10 @@ exports.actualizarDatosReclutador = async function (body) {
 
   const respOk = {
     codigoRespuesta: "00",
-    actualizacion: "ok"    
+    actualizacion: "ok",
   };
   return respOk;
-
-}
+};
 
 exports.listarReclutadorPorId = async function (body) {
   const respLog = await usuarioRepo.listarReclutadorPorId(body);
@@ -165,7 +162,7 @@ exports.listarReclutadorPorId = async function (body) {
   const respOk = {
     codigoRespuesta: "00",
     hasData: respLog.data.length > 0 ? true : false,
-    data: respLog.data.length > 0 ? respLog.data[0] : {}, 
+    data: respLog.data.length > 0 ? respLog.data[0] : {},
   };
   return respOk;
 };
@@ -183,42 +180,94 @@ exports.actualizarPwdReclutador = async function (body) {
 
   const respOk = {
     codigoRespuesta: "00",
-    actualizacion: "ok"    
+    actualizacion: "ok",
   };
   return respOk;
+};
 
-}
+exports.obtenerDataInfoLinkedin = async function (token) {
+  try {
+    const response = await axios.get( process.env.linkedin_data_info_url , {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    console.log("data info user ==>", response.data);
+    const respOk = {
+      codigoRespuesta: "00",
+      dataUser: response.data,
+    };
+    return respOk;
+  } catch (error) {
+    console.log("error===>", error);
+    const respErr = {
+      codigoRespuesta: "99",
+      error: error,
+    };
+    return respErr;
+  }
+};
+
+exports.validarTokenLinkedin = async function (token) {
+  var querystring = require("querystring");
+  try {
+    const response = await axios.post(
+      process.env.linkedin_valida_code_url,
+      querystring.stringify({
+        grant_type: "authorization_code",
+        code: token,
+        client_id: process.env.linkedin_valida_code_client_id,
+        client_secret: process.env.linkedin_valida_code_client_secret,
+        redirect_uri: process.env.linkedin_valida_code_redirect,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("response===>", response.data);
+    const respOk = {
+      codigoRespuesta: "00",
+      dataToken: response.data,
+    };
+    return respOk;
+
+  } catch (error) {
+    console.log("error accessToken ===>", error);
+    const respErr = {
+      codigoRespuesta: "99",
+      error: error,
+    };
+    return respErr;
+  }
+};
 
 exports.validarTokenGoogle = async function (token) {
-  
-const clientId='981520994137-jeoi9je1nikppgossau431aa4c070ge2.apps.googleusercontent.com';
-const client = new OAuth2Client(clientId);
-try {
-  const verify = await client.verifyIdToken({
-    idToken:token,
-    audience:clientId
-  });
-  const user = verify.getPayload();
-  const respOk = {
-    codigoRespuesta: "00",
-    user
-  };
+  const clientId = process.env.client_id_google_verify_token;
+  const client = new OAuth2Client(clientId);
+  try {
+    const verify = await client.verifyIdToken({
+      idToken: token,
+      audience: clientId,
+    });
+    const user = verify.getPayload();
+    const respOk = {
+      codigoRespuesta: "00",
+      user,
+    };
 
-
-  return respOk;
-
-} catch (error) {
-  const respErr = {
-    codigoRespuesta: "99",
-    error
-  };
-  return respErr;
-}
-
-
-
-  
-}
+    return respOk;
+  } catch (error) {
+    const respErr = {
+      codigoRespuesta: "99",
+      error,
+    };
+    return respErr;
+  }
+};
 
 exports.listarReclutadorPorEmail = async function (email) {
   const respLog = await usuarioRepo.listarReclutadorPorEmail(email);
@@ -232,7 +281,7 @@ exports.listarReclutadorPorEmail = async function (email) {
   const respOk = {
     codigoRespuesta: "00",
     hasData: respLog.data.length > 0 ? true : false,
-    data: respLog.data.length > 0 ? respLog.data[0] : {}, 
+    data: respLog.data.length > 0 ? respLog.data[0] : {},
   };
   return respOk;
 };

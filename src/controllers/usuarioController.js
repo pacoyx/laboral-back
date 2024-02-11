@@ -8,6 +8,56 @@ exports.login = async function (req, res) {
   return res.json(respLog);
 };
 
+exports.validaTokenLinkedin = async function (req, res) {
+  const body = req.body;
+
+  const respValidacion = await usuarioService.validarTokenLinkedin(body.token);
+  if (respValidacion.codigoRespuesta != "00") {
+    return res.json(respValidacion);
+  }
+
+  const respDataInfoUser = await usuarioService.obtenerDataInfoLinkedin(
+    respValidacion.dataToken.access_token
+  );
+  if (respDataInfoUser.codigoRespuesta != "00") {
+    return res.json(respDataInfoUser);
+  }
+
+  var respDataReclutador = await usuarioService.listarReclutadorPorEmail(
+    respDataInfoUser.dataUser.email
+  );
+  if (!respDataReclutador.hasData) {
+    // registamos usuario en BD
+    const reqUsu = {
+      correo: respDataInfoUser.dataUser.email,
+      clave: respDataInfoUser.dataUser.email,
+      nombreCompleto: respDataInfoUser.dataUser.name,
+      nombreEmpresa: respDataInfoUser.dataUser.name,
+      celular: "000-000-000",
+      icono: respDataInfoUser.dataUser.picture,
+      typeLogin: "linkedin",
+    };
+    const respRegUsu = await usuarioService.registrarUsuario(reqUsu);
+    if (respRegUsu.codigoRespuesta != "00") {
+      return respRegUsu;
+    }
+
+    respDataReclutador = await usuarioService.listarReclutadorPorEmail(
+      respDataInfoUser.dataUser.email
+    );
+  }
+
+  // generamos jwt
+  const token = tokenService.GenerarToken(respDataInfoUser.dataUser.email);
+
+  // devolvemos la data de usuario OK
+  return res.json({
+    codigoRespuesta: "00",
+    data: respDataReclutador.data,
+    token,
+  });
+};
+
 exports.validaTokenGoogle = async function (req, res) {
   const body = req.body;
 
@@ -17,11 +67,10 @@ exports.validaTokenGoogle = async function (req, res) {
     return res.json(respValidacion);
   }
 
- 
-
-
   //traemos data del reclutador por email
-  const respdataReclu = await usuarioService.listarReclutadorPorEmail(respValidacion.user.email);
+  const respdataReclu = await usuarioService.listarReclutadorPorEmail(
+    respValidacion.user.email
+  );
   if (!respdataReclu.hasData) {
     // registamos usuario en BD
     const reqUsu = {
@@ -31,13 +80,12 @@ exports.validaTokenGoogle = async function (req, res) {
       nombreEmpresa: respValidacion.user.name,
       celular: "000-000-000",
       icono: respValidacion.user.picture,
-      typeLogin: 'google',
+      typeLogin: "google",
     };
     const respRegUsu = await usuarioService.registrarUsuario(reqUsu);
     if (respRegUsu.codigoRespuesta != "00") {
       return respRegUsu;
     }
-  
   }
 
   // generamos jwt
@@ -45,7 +93,7 @@ exports.validaTokenGoogle = async function (req, res) {
 
   // devolvemos la data de usuario OK
   return res.json({
-    codigoRespuesta: '00',
+    codigoRespuesta: "00",
     data: respdataReclu.data,
     token,
   });
@@ -73,10 +121,11 @@ exports.validaRegistroUsuario = async function (req, res) {
 exports.actualizarDatosReclutador = async function (req, res) {
   const body = JSON.parse(req.body.infoData);
   var fileName = "";
-  console.log('req.files==>',req.files);
+  console.log("req.files==>", req.files);
   if (req.files) {
     const { myFile } = req.files;
-    fileName = "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
+    fileName =
+      "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
     myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
 
     try {

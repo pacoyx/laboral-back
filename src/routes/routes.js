@@ -31,6 +31,7 @@ module.exports = async function (app) {
   app.post("/deleteJobsByIds", empleosCtrl.eliminarEmpleoPorId);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
+  app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);
 
   app.get("/health", (req, res) => {  
     //  const testMail = require("../services/mailService");  
