@@ -187,7 +187,7 @@ exports.actualizarPwdReclutador = async function (body) {
 
 exports.obtenerDataInfoLinkedin = async function (token) {
   try {
-    const response = await axios.get( process.env.linkedin_data_info_url , {
+    const response = await axios.get(process.env.linkedin_data_info_url, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -211,30 +211,31 @@ exports.obtenerDataInfoLinkedin = async function (token) {
 
 exports.validarTokenLinkedin = async function (token) {
   var querystring = require("querystring");
-  try {
-    const response = await axios.post(
-      process.env.linkedin_valida_code_url,
-      querystring.stringify({
-        grant_type: "authorization_code",
-        code: token,
-        client_id: process.env.linkedin_valida_code_client_id,
-        client_secret: process.env.linkedin_valida_code_client_secret,
-        redirect_uri: process.env.linkedin_valida_code_redirect,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
 
-    console.log("response===>", response.data);
+  const url = process.env.linkedin_valida_code_url;
+  const objReq = {
+    grant_type: "authorization_code",
+    code: token,
+    client_id: process.env.linkedin_valida_code_client_id,
+    client_secret: process.env.linkedin_valida_code_client_secret,
+    redirect_uri: process.env.linkedin_valida_code_redirect,
+  };
+  console.log('[URL]',url);
+  console.log('[REQ]',objReq);
+
+  try {
+    const response = await axios.post(url, querystring.stringify(objReq), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    console.log("response accessToken ===>", response.data);
     const respOk = {
       codigoRespuesta: "00",
       dataToken: response.data,
     };
     return respOk;
-
   } catch (error) {
     console.log("error accessToken ===>", error);
     const respErr = {
