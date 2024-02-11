@@ -68,7 +68,7 @@ exports.validaTokenGoogle = async function (req, res) {
   }
 
   //traemos data del reclutador por email
-  const respdataReclu = await usuarioService.listarReclutadorPorEmail(
+  var respdataReclu = await usuarioService.listarReclutadorPorEmail(
     respValidacion.user.email
   );
   if (!respdataReclu.hasData) {
@@ -86,6 +86,9 @@ exports.validaTokenGoogle = async function (req, res) {
     if (respRegUsu.codigoRespuesta != "00") {
       return respRegUsu;
     }
+    respdataReclu = await usuarioService.listarReclutadorPorEmail(
+      respValidacion.user.email
+    );
   }
 
   // generamos jwt

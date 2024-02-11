@@ -24,9 +24,9 @@ const transporter = nodemailer.createTransport({
 
 exports.enviarCorreo = async function (objDatos) {
   var message = {
-    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
     to: objDatos.correo,
-    subject: "Aviso de registro laboral.ai",
+    subject: "Aviso de registro laboral.ai",
     text: "Url de validacion: " + objDatos.url,
     html: `<html><body>
     <p>
