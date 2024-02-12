@@ -216,6 +216,7 @@ exports.validarTokenLinkedin = async function (token) {
   const objReq = {
     grant_type: "authorization_code",
     code: token,
+    state:'12ZpTvGc2chql4U',
     client_id: process.env.linkedin_valida_code_client_id,
     client_secret: process.env.linkedin_valida_code_client_secret,
     redirect_uri: process.env.linkedin_valida_code_redirect,
