@@ -225,7 +225,7 @@ exports.validarTokenLinkedin = async function (token) {
   console.log('[REQ]',objReq);
 
   try {
-    const response = await axios.post(url, querystring.stringify(objReq), {
+    const response = await axios.post(url, objReq, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
