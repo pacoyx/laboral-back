@@ -75,7 +75,7 @@ exports.registrarEmpleob2c = async function (query) {
       query.date_expiration,
       query.date_entry,
       query.modality,
-      query.pref_qualifications,
+      query.techskill_tool,
       query.location,
       "1",
       query.modality,
