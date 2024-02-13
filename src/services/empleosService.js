@@ -1,4 +1,5 @@
 const empleosRepo = require("../repositories/empleosRepository");
+const mailService = require("./mailService");
 
 exports.listarEmpleosPorIdUser = async function (body) {
   const respLog = await empleosRepo.listarEmpleosPorIdUsuario(body);
@@ -25,6 +26,7 @@ exports.registrarEmpleo = async function (body) {
       codigoRespuesta: "99",
       error: "error interno",
     };
+
     return resp;
   }
 
@@ -37,6 +39,13 @@ exports.registrarEmpleo = async function (body) {
     };
     return resp;
   }
+
+  const objDatos = {    
+    correo: body.correo,
+    nombre: body.nombre,
+    tituloPuesto: body.job_title
+  };
+  mailService.enviarCorreoRegEmpleo(objDatos);
 
   const respOk = {
     codigoRespuesta: "00",
@@ -76,7 +85,7 @@ exports.eliminarEmpleoPorId = async function (body) {
   const respOk = {
     codigoRespuesta: "00",
     data: "empleo(s) elimiando(s)",
-    respDB
+    respDB,
   };
 
   return respOk;

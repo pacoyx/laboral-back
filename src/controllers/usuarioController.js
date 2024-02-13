@@ -127,8 +127,7 @@ exports.actualizarDatosReclutador = async function (req, res) {
   console.log("req.files==>", req.files);
   if (req.files) {
     const { myFile } = req.files;
-    fileName =
-      "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
+    fileName = "avatar" + new Date().getTime() + "." + myFile.name.split(".")[1];
     myFile.mv(process.cwd() + "/resources/static/uploads/" + fileName);
 
     try {

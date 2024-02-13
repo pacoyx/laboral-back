@@ -1,4 +1,5 @@
 const empresaRepo = require("../repositories/empresaRepository");
+const mailService = require("./mailService");
 
 exports.registrarEmpresa = async function (body) {
   const query = {
@@ -22,6 +23,15 @@ exports.registrarEmpresa = async function (body) {
       error: "error interno",
     };
     return resp;
+  }
+
+  if (body.correo.length > 0) {
+    const objDatos = {
+      correo: body.correo,
+      nombre: body.nombre,
+      nombreEmpresa: body.name,
+    };
+    mailService.enviarCorreoRegEmpresa(objDatos);
   }
 
   const respOk = {
@@ -48,5 +58,3 @@ exports.listarEmpresaPorIdUser = async function (body) {
   };
   return respOk;
 };
-
-

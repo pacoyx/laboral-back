@@ -2,7 +2,6 @@ const empresaService = require('../services/empresaService');
 
 exports.registrarEmpresa = async function (req,res) {
 
-
     const body = JSON.parse(req.body.infoData);    
     var fileName = "";
     if (req.files) {
