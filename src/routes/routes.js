@@ -29,6 +29,7 @@ module.exports = async function (app) {
   app.post("/updatePasswordAccount", usuarioCtrl.actualizarPwdReclutador);
   app.post("/getJobsOpenClose", empleosCtrl.listarEmpleosopenClose);
   app.post("/deleteJobsByIds", empleosCtrl.eliminarEmpleoPorId);
+  app.post("/getCandidatesByJob", empleosCtrl.listarCandidatosPorEmpleo);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
   app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);

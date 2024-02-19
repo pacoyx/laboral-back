@@ -120,7 +120,6 @@ exports.listarEmpleosOpenClose = async function (query) {
   }
 };
 
-
 exports.eliminarEmpleoPorId = async function (idJob) {
   try {
     const SP_PARAMETERS = [idJob];
@@ -138,6 +137,24 @@ exports.eliminarEmpleoPorId = async function (idJob) {
         data: [],
       };
     }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.listarCandidatosPorEmpleo = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idJob];
+    const SP_QUERY = "CALL sp_s_candidate_byjob(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows      
+    };
   } catch (error) {
     console.error(error);
     return {
