@@ -11,15 +11,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const transporter = nodemailer.createTransport({
-//   host: "mail.privateemail.com",
-//   port: 465,
-//   secure: true,
-//   auth: {    
-//     user: "empleoslaboral@laboral.ai",
-//     pass: "testhack%2021AB",
-//   },
-// });
+
+const transporter2 = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "your_email@gmail.com",
+    pass: "your_app_password",
+  },
+});
 
 
 exports.enviarCorreo = async function (objDatos) {
