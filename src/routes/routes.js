@@ -30,6 +30,7 @@ module.exports = async function (app) {
   app.post("/getJobsOpenClose", empleosCtrl.listarEmpleosopenClose);
   app.post("/deleteJobsByIds", empleosCtrl.eliminarEmpleoPorId);
   app.post("/getCandidatesByJob", empleosCtrl.listarCandidatosPorEmpleo);
+  app.post("/getQuestionsByJob", empleosCtrl.listarPreguntasPorEmpleo);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
   app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);

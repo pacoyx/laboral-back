@@ -29,3 +29,9 @@ exports.listarCandidatosPorEmpleo = async function (req,res) {
     const respLog = await empleosService.listarCandidatosPorEmpleo(body);
     return res.json(respLog);
 }
+
+exports.listarPreguntasPorEmpleo = async function (req,res) {
+    const body = req.body;
+    const respLog = await empleosService.listarPreguntasPorEmpleo(body);
+    return res.json(respLog);
+}

@@ -30,15 +30,15 @@ exports.registrarEmpleo = async function (body) {
     return resp;
   }
 
-  const respLog2 = await empleosRepo.registrarEmpleob2c(body);
-  if (!respLog2.estado) {
-    console.log("[ERROR 2]", respLog2.error);
-    const resp = {
-      codigoRespuesta: "99",
-      error: "error interno",
-    };
-    return resp;
-  }
+  // const respLog2 = await empleosRepo.registrarEmpleob2c(body);
+  // if (!respLog2.estado) {
+  //   console.log("[ERROR 2]", respLog2.error);
+  //   const resp = {
+  //     codigoRespuesta: "99",
+  //     error: "error interno",
+  //   };
+  //   return resp;
+  // }
 
   const objDatos = {    
     correo: body.correo,
@@ -93,6 +93,23 @@ exports.eliminarEmpleoPorId = async function (body) {
 
 exports.listarCandidatosPorEmpleo = async function (body) {
   const resp = await empleosRepo.listarCandidatosPorEmpleo(body);
+  if (!resp.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: resp.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: resp.data.length > 0 ? true : false,
+    data: resp.data,
+  };
+  return respOk;
+};
+
+exports.listarPreguntasPorEmpleo = async function (body) {
+  const resp = await empleosRepo.listarPreguntasPorEmpleo(body);
   if (!resp.estado) {
     const resp = {
       codigoRespuesta: "99",
