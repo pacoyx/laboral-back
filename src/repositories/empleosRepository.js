@@ -181,3 +181,40 @@ exports.listarPreguntasPorEmpleo = async function (query) {
     };
   }
 };
+
+
+exports.listarEmpleosPorReclutador = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idUser];
+    const SP_QUERY = "CALL sp_s_job_description_chat(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.listarCandidatosPorEmpleoChat = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idJob];
+    const SP_QUERY = "CALL sp_s_candidate_byjob_chat(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows      
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};

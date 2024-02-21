@@ -124,3 +124,38 @@ exports.listarPreguntasPorEmpleo = async function (body) {
   };
   return respOk;
 };
+
+exports.listarEmpleosPorReclutador = async function (body) {
+  const respLog = await empleosRepo.listarEmpleosPorReclutador(body);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data,
+  };
+  return respOk;
+};
+
+
+exports.listarCandidatosPorEmpleoChat = async function (body) {
+  const resp = await empleosRepo.listarCandidatosPorEmpleoChat(body);
+  if (!resp.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: resp.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: resp.data.length > 0 ? true : false,
+    data: resp.data,
+  };
+  return respOk;
+};
