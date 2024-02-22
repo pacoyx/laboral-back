@@ -185,7 +185,7 @@ exports.listarPreguntasPorEmpleo = async function (query) {
 
 exports.listarEmpleosPorReclutador = async function (query) {
   try {
-    const SP_PARAMETERS = [query.idUser];
+    const SP_PARAMETERS = [query.idRecruiter];
     const SP_QUERY = "CALL sp_s_job_description_chat(?);";
     const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
     return {

@@ -23,7 +23,7 @@ const validarToken = (req, res, next) => {
     var payload;
     try {
 
-      jwtKey = process.env.aurora_server, 
+      jwtKey = process.env.jwtkey, 
 
       payload = jwt.verify(token, jwtKey);
       console.log("payload::", payload);
