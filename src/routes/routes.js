@@ -9,6 +9,7 @@ const {
 const usuarioCtrl = require("../controllers/usuarioController");
 const empresaCtrl = require("../controllers/empresaController");
 const empleosCtrl = require("../controllers/empleosController");
+const chatCtrl = require("../controllers/chatController");
 const fileupload = require("express-fileupload");
 
 module.exports = async function (app) {
@@ -31,9 +32,10 @@ module.exports = async function (app) {
   app.post("/deleteJobsByIds", empleosCtrl.eliminarEmpleoPorId);
   app.post("/getCandidatesByJob", empleosCtrl.listarCandidatosPorEmpleo);
   app.post("/getQuestionsByJob", empleosCtrl.listarPreguntasPorEmpleo);
-
   app.post("/getJobsByRecruiter", empleosCtrl.listarEmpleosPorReclutador);
   app.post("/getCandidatesByJobChat", empleosCtrl.listarCandidatosPorEmpleoChat);
+  app.post("/registerChat", chatCtrl.registrarChat);
+  app.post("/getChatsByRecruiterCandidate", chatCtrl.listarChatPorReclutadorCandidato);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
   app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);
