@@ -19,6 +19,7 @@ exports.listarEmpleosPorIdUser = async function (body) {
 };
 
 exports.registrarEmpleo = async function (body) {
+  body.job_offer_link = process.env.url_empleo;
   const respLog = await empleosRepo.registrarEmpleo(body);
   if (!respLog.estado) {
     console.log("[ERROR 1]", respLog.error);
@@ -30,15 +31,15 @@ exports.registrarEmpleo = async function (body) {
     return resp;
   }
 
-  const respLog2 = await empleosRepo.registrarEmpleob2c(body);
-  if (!respLog2.estado) {
-    console.log("[ERROR 2]", respLog2.error);
-    const resp = {
-      codigoRespuesta: "99",
-      error: "error interno",
-    };
-    return resp;
-  }
+  // const respLog2 = await empleosRepo.registrarEmpleob2c(body);
+  // if (!respLog2.estado) {
+  //   console.log("[ERROR 2]", respLog2.error);
+  //   const resp = {
+  //     codigoRespuesta: "99",
+  //     error: "error interno",
+  //   };
+  //   return resp;
+  // }
 
   const objDatos = {    
     correo: body.correo,
@@ -142,7 +143,6 @@ exports.listarEmpleosPorReclutador = async function (body) {
   return respOk;
 };
 
-
 exports.listarCandidatosPorEmpleoChat = async function (body) {
   const resp = await empleosRepo.listarCandidatosPorEmpleoChat(body);
   if (!resp.estado) {
@@ -156,6 +156,23 @@ exports.listarCandidatosPorEmpleoChat = async function (body) {
     codigoRespuesta: "00",
     hasData: resp.data.length > 0 ? true : false,
     data: resp.data,
+  };
+  return respOk;
+};
+
+exports.listarEmpleosPorId = async function (body) {
+  const respLog = await empleosRepo.listarEmpleosPorId(body);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data[0],
   };
   return respOk;
 };

@@ -1,11 +1,6 @@
 const logSistemaController = require("../controllers/logSistemaController");
-const {
-  login,
-  refresh,
-  register,
-  validarToken,
-} = require("../handlers/handlers");
-// const { validarToken } = require("../middleware/middlewareAuth");
+// const {  login,  refresh,  register,  validarToken,} = require("../handlers/handlers");
+const { validarToken } = require("../middleware/middlewareAuth");
 const usuarioCtrl = require("../controllers/usuarioController");
 const empresaCtrl = require("../controllers/empresaController");
 const empleosCtrl = require("../controllers/empleosController");
@@ -15,7 +10,7 @@ const fileupload = require("express-fileupload");
 module.exports = async function (app) {
   app.use(fileupload());
   
-  // app.use(validarToken);
+  app.use(validarToken);
 
   app.post("/login", usuarioCtrl.login);
   app.post("/registerUser", usuarioCtrl.registrarUsuario);
@@ -36,6 +31,7 @@ module.exports = async function (app) {
   app.post("/getCandidatesByJobChat", empleosCtrl.listarCandidatosPorEmpleoChat);
   app.post("/registerChat", chatCtrl.registrarChat);
   app.post("/getChatsByRecruiterCandidate", chatCtrl.listarChatPorReclutadorCandidato);
+  app.post("/getJobsById", empleosCtrl.listarEmpleosPorId);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
   app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);

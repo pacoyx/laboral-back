@@ -182,7 +182,6 @@ exports.listarPreguntasPorEmpleo = async function (query) {
   }
 };
 
-
 exports.listarEmpleosPorReclutador = async function (query) {
   try {
     const SP_PARAMETERS = [query.idRecruiter];
@@ -209,6 +208,24 @@ exports.listarCandidatosPorEmpleoChat = async function (query) {
     return {
       estado: true,
       data: affectedRows      
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.listarEmpleosPorId = async function (query) {
+  try {
+    const SP_PARAMETERS = [query.idJob];
+    const SP_QUERY = "CALL sp_s_job_description_by_id(?);";
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    return {
+      estado: true,
+      data: affectedRows,
     };
   } catch (error) {
     console.error(error);

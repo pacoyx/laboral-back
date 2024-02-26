@@ -7,7 +7,7 @@ const jwtExpirySeconds = 300;
 const GenerarToken = (username) => {       
     const token = jwt.sign({ username }, jwtKey, {
       algorithm: "HS256",
-      expiresIn: jwtExpirySeconds,
+      expiresIn: '1h',
     });
     console.log("token:", token);
     return token;
